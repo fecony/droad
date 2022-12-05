@@ -2,7 +2,11 @@ app droad {
   wasp: {
     version: "^0.7.1"
   },
-  title: "droad"
+  title: "droad",
+  head: [
+    "<link rel='preconnect' href='https://fonts.bunny.net'>",
+    "<link href='https://fonts.bunny.net/css?family=inter:500,700,900' rel='stylesheet' />"
+  ],
 }
 
 route RootRoute { path: "/", to: MainPage }
