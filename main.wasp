@@ -2,14 +2,18 @@ app droad {
   wasp: {
     version: "^0.7.1"
   },
+
   title: "droad",
+
   head: [
     "<link rel='preconnect' href='https://fonts.bunny.net'>",
     "<link href='https://fonts.bunny.net/css?family=inter:500,700,900' rel='stylesheet' />"
   ],
+
   db: {
     system: PostgreSQL
   },
+
   auth: {
     methods: {
       // usernameAndPassword: {},
@@ -17,9 +21,10 @@ app droad {
       // github: {}, // NOTE: Fingers crossed 🐝
     },
     userEntity: User,
-    externalAuthEntity: SocialLogin,
+    externalAuthEntity: SocialAuth,
     onAuthFailedRedirectTo: "/login",
   },
+
   dependencies: [
     ("@tailwindcss/forms", "^0.5.3"),
     ("phosphor-react", "^1.4.1"),
@@ -28,29 +33,73 @@ app droad {
   ],
 }
 
-entity User {=psl
-  id                        Int            @id @default(autoincrement())
-  name                      String?
-  image                     String?
-  externalAuthAssociations  SocialLogin[]
-  createdAt                 DateTime       @default(now())
-  updatedAt                 DateTime       @updatedAt
-psl=}
-
-entity SocialLogin {=psl
-  id         Int   @id @default(autoincrement())
-  userId     Int
-  provider   String
-  providerId String
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  @@unique([provider, providerId, userId])
-psl=}
+// ----------------- Pages ------------------ //
 
 route RootRoute { path: "/", to: MainPage }
 page MainPage {
   component: import Main from "@client/pages/MainPage"
 }
+
+// ----------------- Entities ------------------ //
+
+entity User {=psl
+  id         Int      @id @default(autoincrement())
+  username   String   @unique
+  email      String?  @unique
+  password   String?
+  avatar     String?
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+
+  roadmaps                  Roadmap[]
+  upvotedFeatures           RoadmapFeature[]  @relation("UpvotedFeatures")
+  externalAuthAssociations  SocialAuth[]
+psl=}
+
+entity SocialAuth {=psl
+  id          Int      @id @default(autoincrement())
+  userId      Int
+  provider    String
+  providerId  String
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerId, userId])
+psl=}
+
+entity Roadmap {=psl
+  id           String  @id @default(cuid())
+  title        String
+  description  String?
+  userId       Int
+  // settings     Json // TODO: customize roadmap settings
+  // customStatuses String[] // TODO: custom statuses for features
+  // collaborators  User[] // TODO: allow to invite other users to work on roadmap (will allow them to change settings, etc)
+
+  features  RoadmapFeature[]
+
+  user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+psl=}
+
+entity RoadmapFeature {=psl
+  id           String   @id @default(cuid())
+  title        String
+  description  String?
+  votes        Int      @default(0)
+  // comments     Comment[] // TODO: option to comment on features! if allowed
+  // status     String | Status // TODO: relation with status
+
+  roadmapId  String
+  roadmap    Roadmap  @relation(fields: [roadmapId], references: [id], onDelete: Cascade)
+  upvotedBy  User[]   @relation("UpvotedFeatures")
+
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+psl=}
+
+// ----------------- X operations ------------------ //
