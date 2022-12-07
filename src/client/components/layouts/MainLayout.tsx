@@ -1,7 +1,7 @@
 import { ReactNode } from 'react';
-import '../main.css';
+import '../../main.css';
 
-export default function Layout({ children }: { children: ReactNode }) {
+export default function MainLayout({ children }: { children: ReactNode }) {
   return (
     <>
       {/* TODO: navbar, auth, etc */}

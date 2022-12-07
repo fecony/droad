@@ -4,7 +4,7 @@ import {
   GithubLogo,
   SpotifyLogo,
 } from 'phosphor-react';
-import Layout from '../components/Layout';
+import Layout from '../components/layouts/MainLayout';
 
 const AboutPage = () => {
   // TODO: list all things used here

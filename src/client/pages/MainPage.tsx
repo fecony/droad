@@ -1,12 +1,12 @@
-import Layout from '../components/Layout';
+import MainLayout from '../components/layouts/MainLayout';
 import { Heart } from 'phosphor-react';
 
 const MainPage = () => {
   return (
-    <Layout>
+    <MainLayout>
       <h1 className='text-3xl font-bold underline'>Hello, wasp!</h1>
       <Heart size={32} color='hotpink' weight='fill' />
-    </Layout>
+    </MainLayout>
   );
 };
 
