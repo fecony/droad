@@ -48,3 +48,7 @@ Then run following commands to run Docker in background with postgres database a
 ## Acknowledgements
 
 <!-- TODO: add links to readme.so and wasp page -->
+
+## Reference
+
+- [Radix Colors](https://www.radix-ui.com/colors)

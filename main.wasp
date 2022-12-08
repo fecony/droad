@@ -30,6 +30,8 @@ app droad {
     ("phosphor-react", "^1.4.1"),
     ("class-variance-authority", "^0.4.0"),
     ("clsx", "^1.2.1"),
+    ("windy-radix-palette", "^0.4.1"),
+    ("@radix-ui/colors", "^0.1.8"),
   ],
 }
 
