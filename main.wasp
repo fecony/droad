@@ -56,6 +56,7 @@ entity User {=psl
   roadmaps                  Roadmap[]
   upvotedFeatures           RoadmapFeature[]  @relation("UpvotedFeatures")
   externalAuthAssociations  SocialAuth[]
+  // comments                  Comment[]
 psl=}
 
 entity SocialAuth {=psl
@@ -75,14 +76,14 @@ entity Roadmap {=psl
   id           String  @id @default(cuid())
   title        String
   description  String?
-  userId       Int
+  authorId       Int
   // settings     Json // TODO: customize roadmap settings
   // customStatuses String[] // TODO: custom statuses for features
   // collaborators  User[] // TODO: allow to invite other users to work on roadmap (will allow them to change settings, etc)
 
   features  RoadmapFeature[]
 
-  user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  author  User  @relation(fields: [authorId], references: [id], onDelete: Cascade)
 
   createdAt  DateTime  @default(now())
   updatedAt  DateTime  @updatedAt
@@ -103,5 +104,18 @@ entity RoadmapFeature {=psl
   createdAt  DateTime  @default(now())
   updatedAt  DateTime  @updatedAt
 psl=}
+
+// entity Comment {=psl
+//   id               String @id @default(cuid())
+//   text             String
+//   authorId         Int
+//   roadmapFeatureId String
+
+//   author   User            @relation(fields: [authorId], references: [id])
+//   feature  RoadmapFeature  @relation(fields: [roadmapFeatureId], references: [id])
+
+//   createdAt  DateTime  @default(now())
+//   updatedAt  DateTime  @updatedAt
+// psl=}
 
 // ----------------- X operations ------------------ //
