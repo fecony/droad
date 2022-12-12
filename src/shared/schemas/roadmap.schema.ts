@@ -10,21 +10,22 @@ export const RoadmapViewSchema = z.object({
     updatedAt: z.date(),
 
     // TODO: add user and feature schema
+    authorId: z.number(),
     author: UserSchema.partial().optional(),
     features: FeaturesSchema.optional(),
 
   // settings     Json // TODO: customize roadmap settings
   // customStatuses String[] // TODO: custom statuses for features
   // collaborators  User[] // TODO: allow to invite other users to work on roadmap (will allow them to change settings, etc)
-})
+});
 
 export const RoadmapCreateSchema = z.object({
     title: z.string().min(1),
     description: z.string(),
-    author: z.object({}),
+    authorId: z.number(),
 });
 
-export const RoadmapUpdateSchema = RoadmapCreateSchema.extend({});
+export const RoadmapUpdateSchema = RoadmapCreateSchema.partial().omit({ authorId: true });;
 
 export type Roadmap = z.TypeOf<typeof RoadmapViewSchema>;
 export type RoadmapUpdate = z.TypeOf<typeof RoadmapUpdateSchema>;

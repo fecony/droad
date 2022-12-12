@@ -1,7 +1,6 @@
 import { Prisma } from '@prisma/client';
 import HttpError from '@wasp/core/HttpError.js'
 import { RoadmapViewSchema, Roadmap } from '../../shared/schemas/roadmap.schema.js';
-import { User as Author } from '../../shared/schemas/user.schema.js';
 import { exclude } from '../../shared/prisma.js';
 
 export const getRoadmaps = async (args: any, context: any): Promise<Partial<Roadmap>[]> => {
@@ -34,7 +33,7 @@ export const getRoadmap = async (args: any, context: any): Promise<Partial<Roadm
     }
 
     const delegate: Prisma.RoadmapDelegate<{}> = context.entities.Roadmap as Prisma.RoadmapDelegate<{}>;
-    const roadmapModel: Roadmap  = await delegate.findUnique({
+    const roadmapModel = await delegate.findFirst({
         where: { 
             id: args.roadmapId
         },
@@ -44,9 +43,14 @@ export const getRoadmap = async (args: any, context: any): Promise<Partial<Roadm
         }
     });
 
-    const roadmap: Partial<Roadmap> = {
+    if (!roadmapModel) {
+        throw new HttpError(404);
+    }
+    
+    // NOTE: some messed up things because of messsy zod/prisma/typescript types
+    const roadmap = {
         ...roadmapModel,
-        author: exclude<Partial<Author>, keyof Author>(roadmapModel.author!, ['password']),
+        author: exclude(roadmapModel.author, ['password']),
     };
 
     return RoadmapViewSchema.partial().parse(roadmap);    

@@ -13,7 +13,7 @@ export const UserSchema = z.object({
     // upvotedFeatures           RoadmapFeature[]  @relation("UpvotedFeatures")
     // externalAuthAssociations  SocialAuth[]
     // comments                  Comment[]
-})
+});
 
 export const UserCreateSchema = z.object({
     username: z.string().optional(),
