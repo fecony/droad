@@ -16,7 +16,7 @@ app droad {
 
   auth: {
     methods: {
-      // usernameAndPassword: {},
+      usernameAndPassword: {},
       // google: {},
       // github: {}, // NOTE: Fingers crossed 🐝
     },
@@ -32,6 +32,7 @@ app droad {
     ("clsx", "^1.2.1"),
     ("windy-radix-palette", "^0.4.1"),
     ("@radix-ui/colors", "^0.1.8"),
+    ("zod", "^3.20.0"),
   ],
 }
 
@@ -39,7 +40,18 @@ app droad {
 
 route RootRoute { path: "/", to: MainPage }
 page MainPage {
+  authRequired: true,
   component: import Main from "@client/pages/MainPage"
+}
+
+route LoginRoute { path: "/login", to: LoginPage }
+page LoginPage {
+  component: import Login from "@client/pages/auth/LoginPage"
+}
+
+route SignupRoute { path: "/signup", to: SignupPage }
+page SignupPage {
+  component: import Signup from "@client/pages/auth/SignupPage"
 }
 
 // ----------------- Entities ------------------ //
@@ -48,13 +60,13 @@ entity User {=psl
   id         Int      @id @default(autoincrement())
   username   String   @unique
   email      String?  @unique
-  password   String?
+  password   String   // TODO: ask about password field being optional with social + usernameAndPassword auth methods
   avatar     String?
   createdAt  DateTime  @default(now())
   updatedAt  DateTime  @updatedAt
 
-  roadmaps                  Roadmap[]
-  upvotedFeatures           RoadmapFeature[]  @relation("UpvotedFeatures")
+  roadmaps  Roadmap[]
+  // upvotedFeatures           RoadmapFeature[]  @relation("UpvotedFeatures")
   externalAuthAssociations  SocialAuth[]
   // comments                  Comment[]
 psl=}
@@ -76,7 +88,7 @@ entity Roadmap {=psl
   id           String  @id @default(cuid())
   title        String
   description  String?
-  authorId       Int
+  authorId     Int
   // settings     Json // TODO: customize roadmap settings
   // customStatuses String[] // TODO: custom statuses for features
   // collaborators  User[] // TODO: allow to invite other users to work on roadmap (will allow them to change settings, etc)
@@ -97,9 +109,9 @@ entity RoadmapFeature {=psl
   // comments     Comment[] // TODO: option to comment on features! if allowed
   // status     String | Status // TODO: relation with status
 
-  roadmapId  String
-  roadmap    Roadmap  @relation(fields: [roadmapId], references: [id], onDelete: Cascade)
-  upvotedBy  User[]   @relation("UpvotedFeatures")
+  roadmapId  String?
+  roadmap    Roadmap?  @relation(fields: [roadmapId], references: [id], onDelete: Cascade)
+  // upvotedBy  User[]   @relation("UpvotedFeatures")
 
   createdAt  DateTime  @default(now())
   updatedAt  DateTime  @updatedAt
@@ -119,3 +131,14 @@ psl=}
 // psl=}
 
 // ----------------- X operations ------------------ //
+
+// TODO: remove? leave just for mvp
+query getRoadmaps {
+  fn: import { getRoadmaps } from "@server/roadmap/queries.js",
+  entities: [Roadmap]
+}
+
+query getRoadmap {
+  fn: import { getRoadmap } from "@server/roadmap/queries.js",
+  entities: [Roadmap]
+}
