@@ -1,29 +1,32 @@
-// TODO: custom auth logic and page
-
-// import signup from '@wasp/auth/signup.js';
-
-// const SignupPage = () => {
-//   return <h1>Signup page</h1>;
-// };
-
-// export default SignupPage;
-
-import { Link } from 'react-router-dom'
-import SignupForm from '@wasp/auth/forms/Signup'
-import AuthLayout from '../../components/layouts/AuthLayout';
+import { Link } from "react-router-dom";
+import signup from "@wasp/auth/signup";
+import AuthLayout from "../../components/layouts/AuthLayout";
 
 const SignupPage = () => {
-  return (
-    <AuthLayout>
-      <SignupForm/>
+    const handleSubmit = async (fields: {
+        username: string;
+        password: string;
+    }): Promise<void> => {
+        await signup(fields);
+    };
 
-      <br/>
+    return (
+        <AuthLayout
+            title="Create account"
+            buttonLabel="Sign in"
+            handleSubmit={handleSubmit}
+        >
+            <p className="mt-6 text-left text-sm text-slate-10">
+                Already have an account?
+                <Link
+                    className="text-blue-10 ml-1 hover:underline focus:underline focus:outline-none"
+                    to="/login"
+                >
+                    Go to login
+                </Link>
+            </p>
+        </AuthLayout>
+    );
+};
 
-      <span>
-        I already have an account (<Link to="/login">go to login</Link>).
-      </span>
-    </AuthLayout>
-  )
-}
-
-export default SignupPage
+export default SignupPage;

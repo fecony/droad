@@ -1,12 +1,24 @@
 import { useQuery } from "@wasp/queries";
 import getRoadmaps from "@wasp/queries/getRoadmaps";
+import logout from "@wasp/auth/logout.js";
 import { Heart } from "phosphor-react";
-
+import { useHistory } from "react-router-dom";
+import { toast } from "react-hot-toast";
+import { useEffect } from "react";
 import MainLayout from "../components/layouts/MainLayout";
 // import { RoadmapModel } from '@wasp/shared/types'; // NOTE: dreams...
 
 const MainPage = ({ user }: { user: any }) => {
     const { data: roadmaps, isFetching, error } = useQuery(getRoadmaps);
+    const history = useHistory<{ from: string }>();
+
+    useEffect(() => {
+        if (history.location.state.from.includes("auth page")) {
+            toast.success("It's nice to see you!", {
+                icon: "🐝",
+            });
+        }
+    }, []);
 
     return (
         <MainLayout>
@@ -23,6 +35,7 @@ const MainPage = ({ user }: { user: any }) => {
             {error && "Error: " + error}
 
             {/* TODO: hardcoded roadmap */}
+            <button onClick={logout}> Logout </button>
         </MainLayout>
     );
 };

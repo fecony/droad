@@ -33,6 +33,7 @@ app droad {
     ("windy-radix-palette", "^0.4.1"),
     ("@radix-ui/colors", "^0.1.8"),
     ("zod", "^3.20.0"),
+    ("react-hot-toast", "^2.4.0")
   ],
 }
 
