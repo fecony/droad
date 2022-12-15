@@ -9,7 +9,7 @@ export const voteForFeature = async (args: any, context: any) => {
     }
 
     try {
-        const featureDelegate = context.entities.Feature as Prisma.FeatureDelegate<{}>;
+        const featureDelegate = context.entities.Feature as Prisma.RoadmapFeatureDelegate<{}>;
 
         return featureDelegate.update({
             where: {
