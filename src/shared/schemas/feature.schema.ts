@@ -4,7 +4,7 @@ export const FeatureSchema = z.object({
     id: z.string(),
     title: z.string().min(1),
     description: z.string().min(1),
-    vote: z.number().positive(),
+    votes: z.number().positive(),
 
     createdAt: z.date(),
     updatedAt: z.date(),
@@ -25,6 +25,6 @@ export const FeatureUpdateSchema = FeatureCreateSchema.extend({});
 
 export const FeaturesSchema = z.array(FeatureSchema.partial());
 
-export type Feautre = z.TypeOf<typeof FeatureSchema>;
-export type FeautreUpdate = z.TypeOf<typeof FeatureUpdateSchema>;
-export type FeautreCreate = z.TypeOf<typeof FeatureCreateSchema>;
+export type Feature = z.TypeOf<typeof FeatureSchema>;
+export type FeatureUpdate = z.TypeOf<typeof FeatureUpdateSchema>;
+export type FeatureCreate = z.TypeOf<typeof FeatureCreateSchema>;

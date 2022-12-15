@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import signup from "@wasp/auth/signup";
+import login from "@wasp/auth/login";
 import AuthLayout from "../../components/layouts/AuthLayout";
 
 const SignupPage = () => {
@@ -7,7 +8,10 @@ const SignupPage = () => {
         username: string;
         password: string;
     }): Promise<void> => {
+        const { username, password } = fields;
+
         await signup(fields);
+        await login(username, password);
     };
 
     return (
