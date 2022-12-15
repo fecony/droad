@@ -1,5 +1,4 @@
 import { useQuery } from "@wasp/queries";
-import { useAction } from "@wasp/actions";
 import getDemoRoadmap from "@wasp/queries/getDemoRoadmap";
 import { Heart, Fire } from "phosphor-react";
 import { useHistory } from "react-router-dom";
@@ -21,7 +20,7 @@ const MainPage = () => {
             toast.success("It's nice to see you!", {
                 icon: "🐝",
             });
-            history.location.state.from = ""; // meh
+            window.history.replaceState({}, document.title);
         }
     }, [history.location.state]);
 
