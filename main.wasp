@@ -1,6 +1,6 @@
 app droad {
   wasp: {
-    version: "^0.7.2"
+    version: "^0.7.3"
   },
 
   title: "droad",
@@ -14,6 +14,10 @@ app droad {
     system: PostgreSQL
   },
 
+  client: {
+    setupFn: import mySetupFunction from "@client/myClientSetupCode.js"
+  },
+
   auth: {
     methods: {
       usernameAndPassword: {},
@@ -23,6 +27,7 @@ app droad {
     userEntity: User,
     externalAuthEntity: SocialAuth,
     onAuthFailedRedirectTo: "/login",
+    onAuthSucceededRedirectTo: "/",
   },
 
   dependencies: [
@@ -55,6 +60,12 @@ page SignupPage {
   component: import Signup from "@client/pages/auth/SignupPage"
 }
 
+// TODO: when mvp will be ready for use by other people
+// route RoadmapViewRoute { path: "/roadmap/:roadmapId", to: RoadmapViewPage }
+// page RoadmapViewPage {
+//   component: import ViewPage from "@client/pages/roadmap/ViewPage"
+// }
+
 // ----------------- Entities ------------------ //
 
 entity User {=psl
@@ -67,7 +78,7 @@ entity User {=psl
   updatedAt  DateTime  @updatedAt
 
   roadmaps  Roadmap[]
-  // upvotedFeatures           RoadmapFeature[]  @relation("UpvotedFeatures")
+  upvotedFeatures           RoadmapFeature[]  @relation("UpvotedFeatures")
   externalAuthAssociations  SocialAuth[]
   // comments                  Comment[]
 psl=}
@@ -112,7 +123,7 @@ entity RoadmapFeature {=psl
 
   roadmapId  String?
   roadmap    Roadmap?  @relation(fields: [roadmapId], references: [id], onDelete: Cascade)
-  // upvotedBy  User[]   @relation("UpvotedFeatures")
+  upvotedBy  User[]   @relation("UpvotedFeatures")
 
   createdAt  DateTime  @default(now())
   updatedAt  DateTime  @updatedAt
@@ -143,3 +154,13 @@ query getRoadmap {
   fn: import { getRoadmap } from "@server/roadmap/queries.js",
   entities: [Roadmap]
 }
+
+query getDemoRoadmap {
+  fn: import { getDemoRoadmap } from "@server/roadmap/queries.js",
+  entities: [Roadmap]
+}
+
+// query voteForFeature {
+//   fn: import { voteForFeature } from "@server/roadmap/queries.js"
+//   entities: [Feature]
+// }

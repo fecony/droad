@@ -1,6 +1,7 @@
 import { ReactNode, useState } from "react";
 import { useHistory } from "react-router-dom";
 import { toast } from "react-hot-toast";
+import useAuth from "@wasp/auth/useAuth.js";
 import Layout from "./Layout";
 
 function AuthLayout({
@@ -17,10 +18,17 @@ function AuthLayout({
         password: string;
     }) => Promise<void>;
 }) {
-    const history = useHistory();
-
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
+
+    const { data: user } = useAuth();
+    const history = useHistory();
+
+    if (user) {
+        history.push("/");
+
+        return null;
+    }
 
     const handleFormSubmit = async (event: any) => {
         event.preventDefault();
@@ -38,7 +46,7 @@ function AuthLayout({
     };
 
     return (
-        <div className="flex h-screen justify-center">
+        <main className="flex h-screen justify-center">
             {/* TODO: add real product image */}
             <div
                 className="hidden bg-cover xl:block lg:w-1/2"
@@ -130,7 +138,7 @@ function AuthLayout({
                     </div>
                 </div>
             </div>
-        </div>
+        </main>
     );
 }
 

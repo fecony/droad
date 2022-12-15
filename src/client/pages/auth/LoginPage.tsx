@@ -3,10 +3,7 @@ import login from "@wasp/auth/login.js";
 import AuthLayout from "../../components/layouts/AuthLayout";
 
 const LoginPage = () => {
-    const handleSubmit = async (fields: {
-        username: string;
-        password: string;
-    }): Promise<void> => {
+    const handleSubmit = async (fields: { username: string; password: string }): Promise<void> => {
         const { username, password } = fields;
         await login(username, password);
     };
