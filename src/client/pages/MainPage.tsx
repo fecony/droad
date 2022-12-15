@@ -91,8 +91,6 @@ const Roadmap = ({ roadmap }: { roadmap: RoadmapType }) => {
         return <h2>No demo roadmap found</h2>;
     }
 
-    console.log(roadmap);
-
     const handleVote = async (featureId: string, votedByUser: boolean): Promise<void> => {
         if (!user) {
             toast("Guest users can't vote (just for demo)");
@@ -109,7 +107,7 @@ const Roadmap = ({ roadmap }: { roadmap: RoadmapType }) => {
             }
         } catch (error) {
             toast.error("idk why but we can't vote! :(");
-            console.log(error);
+            console.error(error);
         }
     };
 

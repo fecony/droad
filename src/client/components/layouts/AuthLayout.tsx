@@ -36,7 +36,7 @@ function AuthLayout({
             history.push("/", { from: "auth page" });
         } catch (error: any) {
             console.error(error);
-            toast.error(`Looks like ${error.data.message}`, {
+            toast.error(`Looks like ${error?.data?.message}`, {
                 icon: "🐛",
             });
         }
