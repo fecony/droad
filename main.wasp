@@ -46,7 +46,6 @@ app droad {
 
 route RootRoute { path: "/", to: MainPage }
 page MainPage {
-  authRequired: true,
   component: import Main from "@client/pages/MainPage"
 }
 
@@ -160,7 +159,7 @@ query getDemoRoadmap {
   entities: [Roadmap]
 }
 
-// query voteForFeature {
-//   fn: import { voteForFeature } from "@server/roadmap/queries.js"
-//   entities: [Feature]
-// }
+action voteForFeature {
+  fn: import { voteForFeature } from "@server/feature/actions.js",
+  entities: [Roadmap, RoadmapFeature]
+}

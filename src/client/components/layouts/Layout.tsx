@@ -16,7 +16,7 @@ export default function Layout<P extends object>(LayoutComponent: React.Componen
                     }}
                 />
 
-                <div className="bg-slate-1 dark:bg-slate-2">
+                <div className="h-[calc(100vh-3.5rem)] bg-slate-1 dark:bg-slate-2 mt-14">
                     <LayoutComponent {...(props as P)} />
                 </div>
             </>

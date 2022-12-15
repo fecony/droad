@@ -63,7 +63,18 @@ export const getDemoRoadmap = async (args: any, context: any) => {
     const roadmap = await delegate.findFirst({
         take: -1,
         include: {
-            features: true,
+            features: {
+                orderBy: {
+                    votes: "desc",
+                },
+                include: {
+                    upvotedBy: {
+                        select: {
+                            id: true,
+                        },
+                    },
+                },
+            },
         },
     });
 
