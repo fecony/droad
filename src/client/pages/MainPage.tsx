@@ -8,8 +8,10 @@ import MainLayout from "../components/layouts/MainLayout";
 // import { RoadmapModel } from '@wasp/shared/types'; // NOTE: dreams...
 import { Roadmap as RoadmapType } from "../../shared/schemas/roadmap.schema.js";
 // import { Feature as FeatureType } from "../../shared/schemas/feature.schema.js"; // WHy did I even
+import voteForFeature from "@wasp/actions/voteForFeature";
+import useAuth from "@wasp/auth/useAuth";
 
-const MainPage = ({ user }: { user: any }) => {
+const MainPage = () => {
     const { data: demoRoadmap, isFetching, error } = useQuery<any, any, { message: string }>(getDemoRoadmap);
     const history = useHistory<{ from: string }>();
 
@@ -18,7 +20,7 @@ const MainPage = ({ user }: { user: any }) => {
             toast.success("It's nice to see you!", {
                 icon: "🐝",
             });
-            history.location.state.from = ""; // meh
+            window.history.replaceState({}, document.title);
         }
     }, [history.location.state]);
 
@@ -82,34 +84,64 @@ const MainPage = ({ user }: { user: any }) => {
 };
 
 const Roadmap = ({ roadmap }: { roadmap: RoadmapType }) => {
+    const { data: user } = useAuth();
+
     if (!roadmap) {
         return <h2>No demo roadmap found</h2>;
     }
 
-    console.log(roadmap)
+    const handleVote = async (featureId: string, votedByUser: boolean): Promise<void> => {
+        if (!user) {
+            toast("Guest users can't vote (just for demo)");
+            return;
+        }
+
+        try {
+            await voteForFeature({ featureId, votedByUser });
+
+            if (!votedByUser) {
+                toast.success("Thank you for voting!", {
+                    icon: "🐝",
+                });
+            }
+        } catch (error) {
+            toast.error("idk why but we can't vote! :(");
+            console.error(error);
+        }
+    };
 
     return (
         <>
-            {roadmap.features!.map((feature, idx) => (
-                <Feature
-                    feature={feature}
-                    key={idx}
-                />
-            ))}
+            {roadmap.features!.map((feature, idx) => {
+                const votedByIds = feature.upvotedBy?.map(({ id }) => id) || [];
+                const upvotedByUser = user && !!votedByIds.includes(user.id);
+
+                return (
+                    <Feature
+                        feature={feature}
+                        upvotedByUser={upvotedByUser}
+                        handleVote={() => handleVote(feature.id as string, upvotedByUser)}
+                        key={idx}
+                    />
+                );
+            })}
         </>
     );
 };
 
 // NOTE: Any goes brrr 🐝
-const Feature = ({ feature }: any) => {
+const Feature = ({ feature, handleVote, upvotedByUser }: any) => {
     return (
         <div className="p-4 bg-slate-3 rounded-lg">
             <div className="flex items-center space-x-2 w-full">
-                <button className="flex w-20 shrink-0 items-center justify-center flex-col space-y-1">
+                <button
+                    className="flex w-20 shrink-0 items-center justify-center flex-col space-y-1"
+                    onClick={handleVote}
+                >
                     <Heart
                         size={24}
                         className="text-red-9"
-                        weight="fill" // NOTE: should be filled if upvotedBy includes current user ID
+                        weight={upvotedByUser ? "fill" : "regular"}
                     />
                     <span className="text-sm text-slate-10">{feature.votes} votes</span>
                 </button>

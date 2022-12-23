@@ -1,10 +1,13 @@
 import { z } from "zod";
+import { UsersSchema } from "./user.schema.js";
 
 export const FeatureSchema = z.object({
     id: z.string(),
     title: z.string().min(1),
     description: z.string().min(1),
     votes: z.number().positive(),
+
+    upvotedBy: UsersSchema.optional(),
 
     createdAt: z.date(),
     updatedAt: z.date(),

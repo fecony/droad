@@ -13,10 +13,7 @@ function AuthLayout({
     children: ReactNode;
     title: string;
     buttonLabel: string;
-    handleSubmit: (fields: {
-        username: string;
-        password: string;
-    }) => Promise<void>;
+    handleSubmit: (fields: { username: string; password: string }) => Promise<void>;
 }) {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
@@ -39,14 +36,14 @@ function AuthLayout({
             history.push("/", { from: "auth page" });
         } catch (error: any) {
             console.error(error);
-            toast.error(`Looks like ${error.data.message}`, {
+            toast.error(`Looks like ${error?.data?.message}`, {
                 icon: "🐛",
             });
         }
     };
 
     return (
-        <main className="flex h-screen justify-center">
+        <main className="flex h-full justify-center">
             {/* TODO: add real product image */}
             <div
                 className="hidden bg-cover xl:block lg:w-1/2"
@@ -58,17 +55,13 @@ function AuthLayout({
                 <div className="items-top flex-col h-full bg-blackA-9 dark:bg-blackA-5 p-20">
                     <h2 className="text-4xl font-bold text-gray-4">Roadmap</h2>
                     {/* TODO: add some real text */}
-                    <p className="mt-3 max-w-xl text-gray-4">
-                        Lorem ipsum some motivational text later
-                    </p>
+                    <p className="mt-3 max-w-xl text-gray-4">Lorem ipsum some motivational text later</p>
                 </div>
             </div>
 
             <div className="mx-auto flex w-full max-w-md items-center px-6 lg:w-1/2">
                 <div className="flex-1">
-                    <h2 className="text-left text-3xl font-bold text-slate-12">
-                        {title}
-                    </h2>
+                    <h2 className="text-left text-3xl font-bold text-slate-12">{title}</h2>
 
                     {/* <!-- TODO: github login --> */}
 
@@ -84,9 +77,7 @@ function AuthLayout({
 
                                 <input
                                     value={username}
-                                    onChange={(event) =>
-                                        setUsername(event.target.value)
-                                    }
+                                    onChange={(event) => setUsername(event.target.value)}
                                     type="username"
                                     name="text"
                                     id="username"
@@ -96,20 +87,16 @@ function AuthLayout({
                             </div>
 
                             <div className="mt-6">
-                                {/* <div className='mb-2 flex justify-between'> */}
                                 <label
                                     htmlFor="password"
                                     className="mb-2 flex text-sm text-slate-12"
                                 >
                                     Password
                                 </label>
-                                {/* </div> */}
 
                                 <input
                                     value={password}
-                                    onChange={(event) =>
-                                        setPassword(event.target.value)
-                                    }
+                                    onChange={(event) => setPassword(event.target.value)}
                                     type="password"
                                     name="password"
                                     id="password"
