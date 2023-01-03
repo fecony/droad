@@ -1,5 +1,3 @@
-import { generateAvailableDictionaryUsername } from "@wasp/core/auth.js";
-
 export function config() {
     const clientID = process.env["GITHUB_CLIENT_ID"];
     const clientSecret = process.env["GITHUB_CLIENT_SECRET"];
