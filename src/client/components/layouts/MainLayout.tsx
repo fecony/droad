@@ -12,6 +12,16 @@ function MainLayout({ children }: { children: ReactNode }) {
         <>
             <main className="h-screen justify-center">{children}</main>
 
+            {user && (
+                <button className="fixed top-16 right-2 border border-slate-6 border-2 group hover:border-slate-8 transition-colors duration-300 rounded-md overflow-hidden">
+                    <img
+                        className="w-9 rounded"
+                        src={user.avatar}
+                        alt={`${user.username} avatar`}
+                    />
+                </button>
+            )}
+
             {user ? <LogoutButton /> : <LoginButtonLink />}
 
             {/* TODO: footer and more */}

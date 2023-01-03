@@ -1,6 +1,6 @@
 app droad {
   wasp: {
-    version: "^0.7.3"
+    version: "^0.8.0"
   },
 
   title: "droad",
@@ -21,8 +21,10 @@ app droad {
   auth: {
     methods: {
       usernameAndPassword: {},
-      // google: {},
-      // github: {}, // NOTE: Fingers crossed 🐝
+      gitHub: {
+        configFn: import { config } from "@server/auth/github.js",
+        getUserFieldsFn: import { getUserFields } from "@server/auth/github.js"
+      }
     },
     userEntity: User,
     externalAuthEntity: SocialAuth,

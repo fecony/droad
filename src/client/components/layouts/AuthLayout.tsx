@@ -1,8 +1,10 @@
 import { ReactNode, useState } from "react";
-import { useHistory } from "react-router-dom";
+import { useHistory, useLocation } from "react-router-dom";
 import { toast } from "react-hot-toast";
 import useAuth from "@wasp/auth/useAuth.js";
 import Layout from "./Layout";
+import { signInUrl as githubSignInUrl } from "@wasp/auth/helpers/GitHub";
+import { GithubLogo } from "phosphor-react";
 
 function AuthLayout({
     children,
@@ -20,6 +22,7 @@ function AuthLayout({
 
     const { data: user } = useAuth();
     const history = useHistory();
+    const location = useLocation();
 
     if (user) {
         history.push("/");
@@ -63,9 +66,21 @@ function AuthLayout({
                 <div className="flex-1">
                     <h2 className="text-left text-3xl font-bold text-slate-12">{title}</h2>
 
-                    {/* <!-- TODO: github login --> */}
-
                     <div className="mt-8">
+                        <a
+                            href={githubSignInUrl}
+                            type="button"
+                            className="w-full py-3 px-4 inline-flex justify-center items-center gap-2 rounded border font-medium bg-white text-slate-12 hover:bg-slate-2 focus:ring-opacity-40 focus:border-blue-8 focus:outline-none focus:ring focus:ring-blue-400 transition-all text-sm"
+                        >
+                            {/* TODO: yeah weird icon, chnage to regular GitHub svg */}
+                            <GithubLogo size={24} />
+                            {location.pathname.includes("login") ? "Sign in with GitHub" : "Sign up with GitHub"}
+                        </a>
+
+                        <div className="flex items-center py-3 text-xs uppercase text-gray-400 before:mr-6 before:flex-[1_1_0%] before:border-t before:border-gray-200 after:ml-6 after:flex-[1_1_0%] after:border-t after:border-gray-200">
+                            Or
+                        </div>
+
                         <form onSubmit={handleFormSubmit}>
                             <div>
                                 <label
