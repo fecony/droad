@@ -5,6 +5,12 @@
 
 Full-stack roadmap app built with [wasp-lang](https://wasp-lang.dev/)
 
+<details>
+  <summary>Click for da boi</summary>
+
+  ![da boi](https://cdn.discordapp.com/emojis/1066018968407650354.webp)
+</details>
+
 ## Demo
 
 <!-- TODO: add link to demo -->
